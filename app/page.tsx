@@ -1,5 +1,5 @@
-
 "use client";
+
 declare global {
   interface Window {
     chatbase?: any;
@@ -12,18 +12,19 @@ import { useRef, useState, useEffect } from "react";
 export default function Home() {
   const ref = useRef(null);
 
-  // ⭐ Chatbase Script Injection
+  // ⭐ Chatbase Script Injection FIXED
   useEffect(() => {
     (function () {
       if (!window.chatbase || window.chatbase("getState") !== "initialized") {
-        window.chatbase = (...args) => {
-          if (!window.chatbase.q) window.chatbase.q = [];
-          window.chatbase.q.push(args);
+        window.chatbase = (...args: any[]) => {
+          if (!window.chatbase!.q) window.chatbase!.q = [];
+          window.chatbase!.q.push(args);
         };
+
         window.chatbase = new Proxy(window.chatbase, {
           get(target, prop) {
             if (prop === "q") return target.q;
-            return (...args) => target(prop, ...args);
+            return (...args: any[]) => target(prop, ...args);
           },
         });
       }
@@ -31,8 +32,8 @@ export default function Home() {
       const onLoad = function () {
         const script = document.createElement("script");
         script.src = "https://www.chatbase.co/embed.min.js";
-        script.id = "bXROXpbQOh4ncl6f6r6JX"; //  <-- BOT ID
-        script.domain = "www.chatbase.co";
+        script.id = "bXROXpbQOh4ncl6f6r6JX"; // BOT ID
+        (script as any).domain = "www.chatbase.co"; // FIXED
         document.body.appendChild(script);
       };
 
@@ -144,7 +145,7 @@ export default function Home() {
         <div className="grid md:grid-cols-2 gap-16 max-w-7xl mx-auto items-center">
           <div className="space-y-10">
 
-            {/* CARD 1 */}
+            {/* CARDS */}
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -158,7 +159,6 @@ export default function Home() {
               </p>
             </motion.div>
 
-            {/* CARD 2 */}
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -171,7 +171,6 @@ export default function Home() {
               </p>
             </motion.div>
 
-            {/* CARD 3 */}
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -203,7 +202,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* AUTOMATION SECTION */}
+      {/* AUTOMATION */}
       <section id="automation" className="px-6 md:px-24 py-28 bg-[#FFF9F3]">
         <h2 className="text-4xl font-bold text-center mb-20">A Complete WhatsApp Automation Suite</h2>
 
@@ -287,7 +286,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* REPLACE EMPLOYEES SECTION */}
+      {/* REPLACE EMPLOYEES */}
       <section className="relative px-6 md:px-24 py-40">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat rounded-3xl shadow-2xl"
@@ -307,8 +306,6 @@ export default function Home() {
           </motion.h2>
 
           <div className="grid md:grid-cols-2 gap-10">
-
-            {/* Without */}
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -324,7 +321,6 @@ export default function Home() {
               </ul>
             </motion.div>
 
-            {/* With */}
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -339,7 +335,6 @@ export default function Home() {
                 <li>✔ Only 600 SAR per month</li>
               </ul>
             </motion.div>
-
           </div>
         </div>
       </section>
